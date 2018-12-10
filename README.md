@@ -16,7 +16,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
   ibmcloud plugin install container-service -r Bluemix
   ```
 
-  To verify that it's properly installed run:
+    To verify that it's properly installed run:
 
   ```shell
   ibmcloud plugin list
