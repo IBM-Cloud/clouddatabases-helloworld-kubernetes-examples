@@ -8,7 +8,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
 2. [Download and install IBM Cloud CLI][https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html]
 
-  The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
+   The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
 
 3. Install the IBM Cloud Kubernetes Service plugin.
 
