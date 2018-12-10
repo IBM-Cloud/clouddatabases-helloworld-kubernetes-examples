@@ -6,11 +6,11 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
 1. If you do not already have an IBM Cloud account, [sign up here][IBMCloud_signup_url]
 
-2. [Download and install IBM Cloud CLI](https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html).
+2. [Download and install IBM Cloud CLI][https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html]
 
-   The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
+  The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
 
-3. Install the IBM Cloud Kubernetes Serice plugin.
+3. Install the IBM Cloud Kubernetes Service plugin.
 
   ```shell
   ibmcloud plugin install container-service -r Bluemix
@@ -44,9 +44,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       ```
       Remember the database service instance name.
 
-7. Create your IBM Cloud Kubernetes Service.
-
-  [Create a Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview). Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the lite plan which comes with 1 worker node.
+7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview). Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the lite plan which comes with 1 worker node.
 
   Once a cluster is provisioned, follow the steps to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
 
