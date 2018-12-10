@@ -1,6 +1,6 @@
-# clouddatabases-postgresql-helloworld-nodejs overview
+# clouddatabases-postgresql-nodejs-on-kubernetes overview
 
-clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Databases for PostgreSQL service to a IBM Cloud Foundry application written in Node.js.
+clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Databases for PostgreSQL service to an IBM Cloud Kubernetes Service application written in Node.js.
 
 ## Running the app on IBM Cloud
 
@@ -10,7 +10,23 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
    The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
 
-3. Connect to IBM Cloud in the command line tool and follow the prompts to log in.
+3. Install the IBM Cloud Kubernetes Serice plugin.
+
+  ```shell
+  ibmcloud plugin install container-service -r Bluemix
+  ```
+
+  To verify that it's properly installed run:
+
+  ```shell
+  ibmcloud plugin list
+  ```
+
+4. [Download and install the Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+
+    Follow the instructions for downloading and installing the Kubernetes CLI for the platform you're using.
+
+5. Connect to IBM Cloud in the command line tool and follow the prompts to log in.
 
     ```shell
     ibmcloud login
@@ -18,7 +34,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
     **Note:** If you have a federated user ID, use the `ibmcloud login --sso` command to log in with your single sign on ID.
 
-4. Create your database service.
+6. Create your database service.
 
       The database can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a
       service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-psql" and we wanted it to be a "databases-for-postgresql" deployment on the standard plan running in the us-south region, the command would look like this:
@@ -28,31 +44,49 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       ```
       Remember the database service instance name.
 
-5. Make sure you are targeting the correct IBM Cloud Cloud Foundry org and space.
+7. Create your IBM Cloud Kubernetes Service.
 
-   ```shell
-   ibmcloud target --cf
-   ```
+  [Create a Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview). Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the lite plan which comes with 1 worker node.
+
+  Once a cluster is provisioned, follow the steps to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
+
+8. Make sure you are targeting the correct IBM Cloud resource group of your IBM Cloud Kubernetes Service.
+
+  Use the following command to target your cluster resource group if your resource group is other than `default`.
+
+  ```shell
+  ibmcloud target -g <resource_group_name>
+  ```
+
+  For this example, we're using the `default` resource group.
+
+
+9. Create your own private image repository in IBM Cloud Container Registry to store your application's Docker image. Since we want the images to be private, we need to create a namespace, which will create a unique URL to your image repository.  
+
+  ```shell
+  ibmcloud cr namespace-add <your_namespace>
+  ```
+
+10. Add the IBM Cloud Databases for PostgreSQL service to your cluster.
    
-   Choose from the options provided.
-
-6. Create a Cloud Foundry alias for the database service.
-   
    ```shell
-   ibmcloud resource service-alias-create alias-name --instance-name instance-name
+   ibmcloud ks cluster-service-bind <your_cluster_name> default example-psql
    ```
 
-   The alias name can be the same as the database service instance name. So, for our database created in step 4, we could do:
+11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the APO key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
+
+  ```shell
+  kubectl get secrets --namespace=default
+  ```
+
+12. Clone the app to your local environment from your terminal using the following command:
 
    ```shell
-   ibmcloud resource service-alias-create example-psql --instance-name example-psql
+   git clone git@github.com:aa7955/clouddatabases-postgresql-helloworld-nodejs.git
    ```
 
-7. Clone the app to your local environment from your terminal using the following command:
 
-   ```shell
-   git clone https://github.com/IBM-Cloud/clouddatabases-postgresql-helloworld-nodejs.git
-   ```
+
 
 8. `cd` into this newly created directory. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and javascript for the web app. For now, the only file you need to update is the application manifest.
 

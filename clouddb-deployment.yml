@@ -1,0 +1,37 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: postgres-pod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: postgres-pod
+      labels:
+        run: icd-demo
+    spec:
+      containers:
+      - name: icdpostgres-app
+        image: "registry.ng.bluemix.net/algerlabs/icdpg"
+        imagePullPolicy: Always
+        env:
+        - name: BINDING
+          valueFrom:
+            secretKeyRef:
+              name: binding-icd-postgresql
+              key: binding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  labels:
+    run: icd-demo
+spec:
+  type: NodePort
+  selector:
+    run: icd-demo
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30081

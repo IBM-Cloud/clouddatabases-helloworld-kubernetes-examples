@@ -42,39 +42,26 @@ let port = process.env.PORT || 8080;
 // Then we'll pull in the database client library
 const pg = require("pg");
 
-// Now lets get cfenv and ask it to parse the environment variable
-let cfenv = require('cfenv');
+// Route for a health check
+app.get('/healthz', function(req, res) {
+    res.send('OK!');
+});
 
-// load local VCAP configuration  and service credentials
-let vcapLocal;
-try {
-  vcapLocal = require('./vcap-local.json');
-  console.log("Loaded local VCAP");
-} catch (e) { 
-    // console.log(e)
+let credentials;
+
+// Retrieve the Kubernetes environment variables from BINDING in the clouddb-deployment
+// Check to make sure that the BINDING environment variable is present
+// If it's not present, then it will throw an error
+if (process.env.BINDING) {
+    credentials = JSON.parse(process.env.BINDING);
 }
 
-const appEnvOpts = vcapLocal ? { vcap: vcapLocal} : {}
+assert(!util.isUndefined(credentials), "Must be bound to IBM Kubernetes Cluster");
 
-const appEnv = cfenv.getAppEnv(appEnvOpts);
-
-// Within the application environment (appenv) there's a services object
-let services = appEnv.services;
-
-// The services object is a map named by service so we extract the one for PostgreSQL
-var pg_services = services["databases-for-postgresql"];
-
-// This check ensures there is a services for PostgreSQL databases
-assert(!util.isUndefined(pg_services), "Must be bound to databases-for-postgresql services");
-
-// We now take the first bound PostgreSQL service and extract it's credentials object
-var credentials = pg_services[0].credentials;
-var postgresconn = credentials.connection.postgres;
-
+// We now take the first bound PostgreSQL service and extract it's credentials object from BINDING
+let postgresconn = credentials.connection.postgres;
 let caCert = new Buffer.from(postgresconn.certificate.certificate_base64, 'base64').toString();
-
 let connectionString = postgresconn.composed[0];
-
 
 // set up a new client using our config details
 let client = new pg.Client({ connectionString: connectionString,
