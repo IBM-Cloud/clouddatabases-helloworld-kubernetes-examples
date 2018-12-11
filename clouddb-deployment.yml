@@ -1,36 +1,36 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: postgres-pod
+  name: icdpostgres-app
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
-      name: postgres-pod
+      name: icdpostgres-app
       labels:
-        run: icd-demo
+        run: clouddb-demo
     spec:
       containers:
-      - name: icdpostgres-app
-        image: "registry.ng.bluemix.net/algerlabs/icdpg"
+      - name: cloudpostgres-nodejs-app
+        image: "registry.<region>.bluemix.net/<namespace>/icdpg" # Edit me
         imagePullPolicy: Always
         env:
         - name: BINDING
           valueFrom:
             secretKeyRef:
-              name: binding-icd-postgresql
+              name: <postgres-secret-name> # Edit me
               key: binding
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-service
+  name: cloudpostgres-service
   labels:
-    run: icd-demo
+    run: clouddb-demo
 spec:
   type: NodePort
   selector:
-    run: icd-demo
+    run: clouddb-demo
   ports:
   - protocol: TCP
     port: 8080

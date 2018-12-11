@@ -16,7 +16,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       ibmcloud plugin install container-service -r Bluemix
       ```
 
-      To verify that it's properly installed run:
+      To verify that it's properly installed, run:
 
       ```shell
       ibmcloud plugin list
@@ -46,7 +46,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
 7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview). Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the lite plan which comes with 1 worker node.
 
-      Once a cluster is provisioned, follow the steps to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
+      Once a cluster is provisioned, you'll be given a list of steps to follow to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
 
 8. Make sure you are targeting the correct IBM Cloud resource group of your IBM Cloud Kubernetes Service.
 
@@ -70,11 +70,13 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       ibmcloud ks cluster-service-bind <your_cluster_name> default example-psql
       ```
 
-11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the APO key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
+11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
 
       ```shell
       kubectl get secrets --namespace=default
       ```
+
+    **Note**: save the name of the secret that was generated when you bound `example-psql` to your Kubernetes service.
 
 12. Clone the app to your local environment from your terminal using the following command:
 
@@ -82,25 +84,64 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       git clone git@github.com:aa7955/clouddatabases-postgresql-helloworld-nodejs.git
       ```
 
+13. `cd` into this newly created directory. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
+14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdpg`.
 
+    ```shell
+    ibmcloud cr build -t registry.<your-region>.bluemix.net/<namespace>/icdpg .
+    ```
 
-8. `cd` into this newly created directory. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and javascript for the web app. For now, the only file you need to update is the application manifest.
+    After it's built, you can view the image in container registry using:
 
-9. Update the `manifest.yml` file.
+    ```shell
+    ibmcloud cr images
+    ```
 
-   - Change the `name` value. The value you choose will be the name of the app as it appears in your IBM Cloud dashboard.
-   - Change the `route` value to something unique. This will make be the base URL of your application. It should end with `.mybluemix.net`. For example `example-helloworld-nodejs.mybluemix.net`.
+    You'll get something like the following response:
 
-   Update the `service` value in `manifest.yml` to match the name of your database service instance name.
+    ```shell
+    REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
+    registry.ng.bluemix.net/mynamespace/icdpg latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    ```
 
-10. Push the app to IBM Cloud. When you push the app it will automatically be bound to the service.
+15. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
 
-  ```shell
-  ibmcloud cf push
-  ```
+    Under the following, change the `image` name with the repository name that you got from the previous step:
 
-Your application is now running at host you entered as the value for the `route` in `manifest.yml`.
+    ```yaml
+    image: "registry.<region>.bluemix.net/<namespace>/icdpgapp" # Edit me
+    ```
+
+    Now, under `secretKeyRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for PostgreSQL to your Kubernetes cluster.
+
+    ```yaml
+    secretKeyRef:
+      name: <postgres-secret-name> # Edit me
+    ```
+
+    As for the `service` configuration at the bottom of the file, [`nodePort`][nodePort_information] indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Node.js application runs on in the container.
+
+16. Deploy the application to IBM Cloud Kubernetes Service. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
+
+    ```shell
+    kubectl apply -f clouddb-deployment.yml
+    ```
+
+17. Get the IP for the application.
+
+    ```shell
+    ibmcloud ks workers <cluster_name>
+    ```
+
+    The result will be something like:
+
+    ```shell
+    ID                                                 Public IP        Private IP      Machine Type   State    Status   Zone    Version
+    kube-hou02-pa1a59e9fd92f44af9b4147a27a31db5c4-w1   199.199.99.999   10.76.202.188   free           normal   Ready    hou02   1.10.11_1536
+    ```
+
+    Now you can access the application from the Public IP from port 30081.
 
 The node-postgresql-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
 
@@ -108,7 +149,7 @@ The node-postgresql-helloworld app displays the contents of an _examples_ databa
 
 | File | Description |
 | ---- | ----------- |
-|[**server.js**](server.js)|Establishes a connection to the PostgreSQL database using credentials from VCAP_ENV and handles create and read operations on the database. |
+|[**server.js**](server.js)|Establishes a connection to the PostgreSQL database using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the PostgreSQL credentials) and handles create and read operations on the database. |
 |[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the PostgreSQL database.|
 
 The app uses a PUT and a GET operation:
@@ -127,3 +168,4 @@ The app uses a PUT and a GET operation:
 [IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForPostgreSQL
 [Download_IBMCloud_cli]: https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html
 [Download_Kubernetes_cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
+[nodePort_information]: https://console.bluemix.net/docs/containers/cs_nodeport.html#nodeport
