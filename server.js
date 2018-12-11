@@ -49,7 +49,7 @@ app.get('/healthz', function(req, res) {
 
 let credentials;
 
-// Retrieve the Kubernetes environment variables from BINDING in the clouddb-deployment
+// Retrieve the Kubernetes environment variables from BINDING in the clouddb-deployment.yaml file
 // Check to make sure that the BINDING environment variable is present
 // If it's not present, then it will throw an error
 if (process.env.BINDING) {
@@ -58,7 +58,7 @@ if (process.env.BINDING) {
 
 assert(!util.isUndefined(credentials), "Must be bound to IBM Kubernetes Cluster");
 
-// We now take the first bound PostgreSQL service and extract it's credentials object from BINDING
+// We now take the first bound PostgreSQL service and extract its credentials object from BINDING
 let postgresconn = credentials.connection.postgres;
 let caCert = new Buffer.from(postgresconn.certificate.certificate_base64, 'base64').toString();
 let connectionString = postgresconn.composed[0];
