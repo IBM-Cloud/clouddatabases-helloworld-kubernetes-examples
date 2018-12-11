@@ -8,31 +8,31 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
 2. [Download and install IBM Cloud CLI][Download_IBMCloud_cli]
 
-  The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
+    The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
 
 3. Install the IBM Cloud Kubernetes Service plugin.
 
-  ```shell
-  ibmcloud plugin install container-service -r Bluemix
-  ```
+      ```shell
+      ibmcloud plugin install container-service -r Bluemix
+      ```
 
-  To verify that it's properly installed run:
+      To verify that it's properly installed run:
 
-  ```shell
-  ibmcloud plugin list
-  ```
+      ```shell
+      ibmcloud plugin list
+      ```
 
 4. [Download and install the Kubernetes CLI][Download_Kubernetes_cli]
 
-    * Follow the instructions for downloading and installing the Kubernetes CLI for the platform you're using.
+      Follow the instructions for downloading and installing the Kubernetes CLI for the platform you're using.
 
 5. Connect to IBM Cloud in the command line tool and follow the prompts to log in.
 
-    ```shell
-    ibmcloud login
-    ```
+      ```shell
+      ibmcloud login
+      ```
 
-    **Note:** If you have a federated user ID, use the `ibmcloud login --sso` command to log in with your single sign on ID.
+      **Note:** If you have a federated user ID, use the `ibmcloud login --sso` command to log in with your single sign on ID.
 
 6. Create your database service.
 
@@ -46,42 +46,41 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
 7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview). Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the lite plan which comes with 1 worker node.
 
-  Once a cluster is provisioned, follow the steps to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
+      Once a cluster is provisioned, follow the steps to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
 
 8. Make sure you are targeting the correct IBM Cloud resource group of your IBM Cloud Kubernetes Service.
 
-  Use the following command to target your cluster resource group if your resource group is other than `default`.
+      Use the following command to target your cluster resource group if your resource group is other than `default`.
 
-  ```shell
-  ibmcloud target -g <resource_group_name>
-  ```
+      ```shell
+      ibmcloud target -g <resource_group_name>
+      ```
 
-  For this example, we're using the `default` resource group.
-
+      For this example, we're using the `default` resource group.
 
 9. Create your own private image repository in IBM Cloud Container Registry to store your application's Docker image. Since we want the images to be private, we need to create a namespace, which will create a unique URL to your image repository.  
 
-  ```shell
-  ibmcloud cr namespace-add <your_namespace>
-  ```
+      ```shell
+      ibmcloud cr namespace-add <your_namespace>
+      ```
 
 10. Add the IBM Cloud Databases for PostgreSQL service to your cluster.
-   
-   ```shell
-   ibmcloud ks cluster-service-bind <your_cluster_name> default example-psql
-   ```
+
+      ```shell
+      ibmcloud ks cluster-service-bind <your_cluster_name> default example-psql
+      ```
 
 11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the APO key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
 
-  ```shell
-  kubectl get secrets --namespace=default
-  ```
+      ```shell
+      kubectl get secrets --namespace=default
+      ```
 
 12. Clone the app to your local environment from your terminal using the following command:
 
-   ```shell
-   git clone git@github.com:aa7955/clouddatabases-postgresql-helloworld-nodejs.git
-   ```
+      ```shell
+      git clone git@github.com:aa7955/clouddatabases-postgresql-helloworld-nodejs.git
+      ```
 
 
 
