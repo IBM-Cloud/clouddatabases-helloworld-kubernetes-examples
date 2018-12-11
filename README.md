@@ -6,9 +6,9 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
 1. If you do not already have an IBM Cloud account, [sign up here][IBMCloud_signup_url]
 
-2. [Download and install IBM Cloud CLI][https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html]
+2. [Download and install IBM Cloud CLI][Download_IBMCloud_cli]
 
-    * The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
+    The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
 
 3. Install the IBM Cloud Kubernetes Service plugin.
 
@@ -16,13 +16,13 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
   ibmcloud plugin install container-service -r Bluemix
   ```
 
-    * To verify that it's properly installed run:
+    To verify that it's properly installed run:
 
   ```shell
   ibmcloud plugin list
   ```
 
-4. [Download and install the Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+4. [Download and install the Kubernetes CLI][Download_Kubernetes_cli]
 
     * Follow the instructions for downloading and installing the Kubernetes CLI for the platform you're using.
 
@@ -126,4 +126,5 @@ The app uses a PUT and a GET operation:
 
 [databases_for_postgreSQL_url]: https://console.bluemix.net/catalog/services/databases-for-postgreSQL/
 [IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForPostgreSQL
-
+[Download_IBMCloud_cli]: https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html
+[Download_Kubernetes_cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
