@@ -112,7 +112,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
     ```yaml
-    image: "registry.<region>.bluemix.net/<namespace>/icdpgapp" # Edit me
+    image: "registry.<region>.bluemix.net/<namespace>/icdpg" # Edit me
     ```
 
     Now, under `secretKeyRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for PostgreSQL to your Kubernetes cluster.
