@@ -141,7 +141,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
     kube-hou02-pa1a59e9fd92f44af9b4147a27a31db5c4-w1   199.199.99.999   10.76.202.188   free           normal   Ready    hou02   1.10.11_1536
     ```
 
-    Now you can access the application from the Public IP from port 30081.
+    Now you can access the application from the Public IP on port 30081.
 
 The clouddatabases-postgresql-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
 
