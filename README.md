@@ -8,7 +8,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
 2. [Download and install IBM Cloud CLI][https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html]
 
-   The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
+    * The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
 
 3. Install the IBM Cloud Kubernetes Service plugin.
 
@@ -16,15 +16,15 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
   ibmcloud plugin install container-service -r Bluemix
   ```
 
-    To verify that it's properly installed run:
+    * To verify that it's properly installed run:
 
   ```shell
   ibmcloud plugin list
   ```
 
-4. [Download and install the Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+4. [Download and install the Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-    Follow the instructions for downloading and installing the Kubernetes CLI for the platform you're using.
+    * Follow the instructions for downloading and installing the Kubernetes CLI for the platform you're using.
 
 5. Connect to IBM Cloud in the command line tool and follow the prompts to log in.
 
