@@ -1,0 +1,37 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: icdredis-app
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: icdredis-app
+      labels:
+        run: clouddb-demo
+    spec:
+      containers:
+      - name: cloudredis-nodejs-app
+        image: "registry.<region>.bluemix.net/<namespace>/icdredis" # Edit me
+        imagePullPolicy: Always
+        env:
+        - name: BINDING
+          valueFrom:
+            secretKeyRef:
+              name: <redis-secret-name> # Edit me
+              key: binding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudredis-service
+  labels:
+    run: clouddb-demo
+spec:
+  type: NodePort
+  selector:
+    run: clouddb-demo
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30081
