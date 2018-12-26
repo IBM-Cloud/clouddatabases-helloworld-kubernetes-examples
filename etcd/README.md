@@ -158,10 +158,10 @@ The app uses a PUT and a GET operation:
 
 - PUT
   - takes user input from [main.js](public/javascript/main.js)
-  - uses the `client.query` method to add the user input to the words table
+  - uses the `client.put` method to add the user input to the `/ibmclouddb/words/` namespace
 
 - GET
-  - uses `client.query` method to retrieve the contents of the _words_ table
+  - uses `client.getAll` method to retrieve the contents of the `/ibmclouddb/words/` namespace
   - returns the response of the database command to [main.js](public/javascript/main.js)
 
 
