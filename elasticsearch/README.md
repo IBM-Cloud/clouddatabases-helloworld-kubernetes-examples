@@ -1,6 +1,6 @@
-# clouddatabases-postgresql-nodejs-on-kubernetes overview
+# clouddatabases-elasticsearch-nodejs-on-kubernetes overview
 
-clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Databases for PostgreSQL service to an IBM Cloud Kubernetes Service application written in Node.js.
+clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Databases for Elasticsearch service to an IBM Cloud Kubernetes Service application written in Node.js.
 
 ## Running the app on IBM Cloud
 
@@ -37,10 +37,10 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 6. Create your database service.
 
       The database can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a
-      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-psql" and we wanted it to be a "databases-for-postgresql" deployment on the standard plan running in the us-south region, the command would look like this:
+      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-elasticsearch" and we wanted it to be a "databases-for-elasticsearch" deployment on the standard plan running in the us-south region, the command would look like this:
 
       ```shell
-      ibmcloud resource service-instance-create example-psql databases-for-postgresql standard us-south
+      ibmcloud resource service-instance-create example-elasticsearch databases-for-elasticsearch standard us-south
       ```
       Remember the database service instance name.
 
@@ -66,32 +66,32 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       ibmcloud cr namespace-add <your_namespace>
       ```
 
-10. Add the IBM Cloud Databases for PostgreSQL service to your cluster.
+10. Add the IBM Cloud Databases for Elasticsearch service to your cluster.
 
       ```shell
-      ibmcloud ks cluster-service-bind <your_cluster_name> default example-psql
+      ibmcloud ks cluster-service-bind <your_cluster_name> default example-elasticsearch
       ```
 
-11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
+11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for Elasticsearch service that's provisioned in your account.
 
       ```shell
       kubectl get secrets --namespace=default
       ```
 
-    **Note**: save the name of the secret that was generated when you bound `example-psql` to your Kubernetes service.
+    **Note**: save the name of the secret that was generated when you bound `example-elasticsearch` to your Kubernetes service.
 
 12. Clone the app to your local environment from your terminal using the following command:
 
       ```shell
-      git clone git@github.com:aa7955/clouddatabases-postgresql-helloworld-nodejs.git
+      git clone git@github.com:aa7955/clouddatabases-elasticsearch-helloworld-nodejs.git
       ```
 
 13. `cd` into this newly created directory. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
-14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdpg`.
+14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdes`.
 
     ```shell
-    ibmcloud cr build -t registry.<your-region>.bluemix.net/<namespace>/icdpg .
+    ibmcloud cr build -t registry.<your-region>.bluemix.net/<namespace>/icdes .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -104,7 +104,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
     ```shell
     REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    registry.ng.bluemix.net/mynamespace/icdpg latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    registry.ng.bluemix.net/mynamespace/icdes latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 15. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
@@ -112,10 +112,10 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
     ```yaml
-    image: "registry.<region>.bluemix.net/<namespace>/icdpg" # Edit me
+    image: "registry.<region>.bluemix.net/<namespace>/icdes" # Edit me
     ```
 
-    Now, under `secretKeyRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for PostgreSQL to your Kubernetes cluster.
+    Now, under `secretKeyRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for Elasticsearch to your Kubernetes cluster.
 
     ```yaml
     secretKeyRef:
@@ -145,14 +145,14 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 
     Now you can access the application from the Public IP on port 30081.
 
-The clouddatabases-postgresql-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
+The clouddatabases-elasticsearch-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
 
 ## Code Structure
 
 | File | Description |
 | ---- | ----------- |
-|[**server.js**](server.js)|Establishes a connection to the PostgreSQL database using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the PostgreSQL credentials) and handles create and read operations on the database. |
-|[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the PostgreSQL database.|
+|[**server.js**](server.js)|Establishes a connection to the Elasticsearch database using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the Elasticsearch credentials) and handles create and read operations on the database. |
+|[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the Elasticsearch database.|
 
 The app uses a PUT and a GET operation:
 
@@ -166,8 +166,8 @@ The app uses a PUT and a GET operation:
 
 
 
-[databases_for_postgreSQL_url]: https://console.bluemix.net/catalog/services/databases-for-postgreSQL/
-[IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForPostgreSQL
+[databases_for_elasticsearch_url]: https://console.bluemix.net/catalog/services/databases-for-elasticsearch/
+[IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForElasticsearch
 [Download_IBMCloud_cli]: https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html
 [Download_Kubernetes_cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
 [nodePort_information]: https://console.bluemix.net/docs/containers/cs_nodeport.html#nodeport
