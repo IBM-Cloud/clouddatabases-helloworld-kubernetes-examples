@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: cloudelasticsearch-nodejs-app
-        image: "registry.ng.bluemix.net/<namespace>/icdes" # Edit me
+        image: "registry.<region>.bluemix.net/<namespace>/icdes" # Edit me
         imagePullPolicy: Always
         env:
         - name: BINDING
