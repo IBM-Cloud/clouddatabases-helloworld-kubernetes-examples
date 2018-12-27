@@ -4,7 +4,7 @@ A set of example applications built on IBM Cloud Kubernetes using IBM Cloud Data
 
 The repositories containing samples for each database and message queue. Each git branch of this repository corresponds to samples in a particular programming language. For example, when you click on **Branch** you will see there is a **Node** branch, where all examples are written in JavaScript using Node.js. Once you've clicked on the branch, files will be presented that correspond to either a database or a message queue.  
 
-### Trying out the sample applications
+## Trying out the sample applications
 
 Clone the repository of the language that you want to use. For instance, you can clone the **Node** repository by clicking on the **Node** branch. Then select the green button **Clone or download** to get the URL you'll need to clone using SSH or HTTPS. In your terminal you can run a command like:
 
