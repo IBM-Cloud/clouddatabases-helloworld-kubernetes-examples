@@ -1,6 +1,6 @@
-# clouddatabases-etcd-nodejs-on-kubernetes overview
+# cloudmessages-rabbitmq-nodejs-on-kubernetes overview
 
-clouddatabases-etcd-helloworld-nodejs is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Databases for etcd service to an IBM Cloud Kubernetes Service application written in Node.js.
+cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Messages for RabbitMQ service to an IBM Cloud Kubernetes Service application written in Node.js.
 
 ## Running the app on IBM Cloud
 
@@ -37,10 +37,10 @@ clouddatabases-etcd-helloworld-nodejs is a sample IBM Cloud application which sh
 6. Create your database service.
 
       The database can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a
-      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-etcd" and we wanted it to be a "databases-for-etcd" deployment on the standard plan running in the us-south region, the command would look like this:
+      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-rabbitmq" and we wanted it to be a "messages-for-rabbitmq" deployment on the standard plan running in the us-south region, the command would look like this:
 
       ```shell
-      ibmcloud resource service-instance-create example-etcd databases-for-etcd standard us-south
+      ibmcloud resource service-instance-create example-rabbitmq messages-for-rabbitmq standard us-south
       ```
       Remember the database service instance name.
 
@@ -66,24 +66,24 @@ clouddatabases-etcd-helloworld-nodejs is a sample IBM Cloud application which sh
       ibmcloud cr namespace-add <your_namespace>
       ```
 
-10. Add the IBM Cloud Databases for etcd service to your cluster.
+10. Add the IBM Cloud Messages for RabbitMQ service to your cluster.
 
       ```shell
-      ibmcloud ks cluster-service-bind <your_cluster_name> default example-etcd
+      ibmcloud ks cluster-service-bind <your_cluster_name> default example-rabbitmq
       ```
 
-11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for etcd service that's provisioned in your account.
+11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Messages for RabbitMQ service that's provisioned in your account.
 
       ```shell
       kubectl get secrets --namespace=default
       ```
 
-    **Note**: save the name of the secret that was generated when you bound `example-etcd` to your Kubernetes service.
+    **Note**: save the name of the secret that was generated when you bound `example-rabbitmq` to your Kubernetes service.
 
 12. Clone the app to your local environment from your terminal using the following command:
 
       ```shell
-      git clone git@github.com:aa7955/clouddatabases-etcd-helloworld-nodejs.git
+
       ```
 
 13. `cd` into this newly created directory. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
@@ -103,8 +103,8 @@ clouddatabases-etcd-helloworld-nodejs is a sample IBM Cloud application which sh
     You'll get something like the following response:
 
     ```shell
-    REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    registry.ng.bluemix.net/mynamespace/icdetcd latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    REPOSITORY                                      TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
+    registry.ng.bluemix.net/mynamespace/icmrabbitmq latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 15. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
@@ -115,11 +115,11 @@ clouddatabases-etcd-helloworld-nodejs is a sample IBM Cloud application which sh
     image: "registry.<region>.bluemix.net/<namespace>/icdetcd" # Edit me
     ```
 
-    Now, under `secretKeyRef`, change the name of `<etcd-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for etcd to your Kubernetes cluster.
+    Now, under `secretKeyRef`, change the name of `<rabbitmq-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Messages for RabbitMQ to your Kubernetes cluster.
 
     ```yaml
     secretKeyRef:
-      name: <etcd-secret-name> # Edit me
+      name: <rabbitmq-secret-name> # Edit me
     ```
 
     As for the `service` configuration at the bottom of the file, [`nodePort`][nodePort_information] indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Node.js application runs on in the container.
@@ -145,29 +145,29 @@ clouddatabases-etcd-helloworld-nodejs is a sample IBM Cloud application which sh
 
     Now you can access the application from the Public IP on port 30081.
 
-The clouddatabases-etcd-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
+The cloudmessages-rabbitmq-helloworld app displays the contents of a _sample_ message queue. To demonstrate that the app is connected to your service, add some words to the message queue. The words are displayed as you add them, with the most recently added words displayed first.
 
 ## Code Structure
 
 | File | Description |
 | ---- | ----------- |
-|[**server.js**](server.js)|Establishes a connection to the etcd database using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the etcd credentials) and handles create and read operations on the database. |
-|[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the etcd database.|
+|[**server.js**](server.js)|Establishes a connection to the RabbitMQ message queue using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the etcd credentials) and handles create and read operations on RabbitMQ. |
+|[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the RabbitMQ message queue.|
 
 The app uses a PUT and a GET operation:
 
 - PUT
   - takes user input from [main.js](public/javascript/main.js)
-  - uses the `client.put` method to add the user input to the `/ibmclouddb/words/` namespace
+  - opens a connection to the message queue and publishes it to the exchange adding the message as a buffer
 
 - GET
-  - uses `client.getAll` method to retrieve the contents of the `/ibmclouddb/words/` namespace
-  - returns the response of the database command to [main.js](public/javascript/main.js)
+  - opens a connection to the message queues and gets the message from the `sample` queue
+  - returns the response of the message queue to [main.js](public/javascript/main.js)
 
 
 
-[databases_for_etcd_url]: https://console.bluemix.net/catalog/services/databases-for-etcd/
-[IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForetcd
+[messages_for_rabbitmq_url]: https://cloud.ibm.com/catalog/services/messages-for-rabbitmq
+[IBMCloud_signup_url]: https://cloud.ibm.com/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-messagesforrabbitmq
 [Download_IBMCloud_cli]: https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html
 [Download_Kubernetes_cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
 [nodePort_information]: https://console.bluemix.net/docs/containers/cs_nodeport.html#nodeport

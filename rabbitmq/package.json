@@ -1,10 +1,11 @@
 {
-  "name": "clouddatabases-elasticsearch-nodejs-on-kubernetes",
-  "version": "0.0.0",
+  "name": "clouddatabases-rabbitmq-nodejs-on-kubernetes",
+  "version": "1.0.0",
+  "description": "IBM Cloud Messages for RabbitMQ Node.js example for Kubernetes",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "elasticsearch": "^15.2.0",
-    "express": "~4.x"
+    "body-parser": "^1.17.2",
+    "amqplib": "^0.5.2",
+    "express": "^4.16.4"
   },
   "main": "server.js",
   "scripts": {
@@ -14,7 +15,7 @@
     "type": "git",
     "url": ""
   },
-  "author": "IBM Corp.",
+  "author": "IBM",
   "contributors": [
     {
       "name": "Abdullah Alger",

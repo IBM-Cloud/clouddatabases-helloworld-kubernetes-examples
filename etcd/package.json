@@ -1,5 +1,5 @@
 {
-  "name": "clouddatabases-postgresql-nodejs-on-kubernetes",
+  "name": "clouddatabases-etcd-nodejs-on-kubernetes",
   "version": "1.0.0",
   "description": "IBM Cloud Databases for etcd Node.js example for Kubernetes",
   "dependencies": {

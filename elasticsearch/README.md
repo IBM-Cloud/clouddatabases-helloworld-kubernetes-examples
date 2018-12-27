@@ -115,11 +115,11 @@ clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application
     image: "registry.<region>.bluemix.net/<namespace>/icdes" # Edit me
     ```
 
-    Now, under `secretKeyRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for Elasticsearch to your Kubernetes cluster.
+    Now, under `secretKeyRef`, change the name of `<elasticsearch-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for Elasticsearch to your Kubernetes cluster.
 
     ```yaml
     secretKeyRef:
-      name: <postgres-secret-name> # Edit me
+      name: <elasticsearch-secret-name> # Edit me
     ```
 
     As for the `service` configuration at the bottom of the file, [`nodePort`][nodePort_information] indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Node.js application runs on in the container.
