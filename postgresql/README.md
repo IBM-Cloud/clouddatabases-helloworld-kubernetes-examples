@@ -83,10 +83,10 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
 12. Clone the app to your local environment from your terminal using the following command:
 
       ```shell
-      git clone git@github.com:aa7955/clouddatabases-postgresql-helloworld-nodejs.git
+      git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
       ```
 
-13. `cd` into this newly created directory. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
+13. `cd` into this newly created directory, and `cd` into the `postgresql` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
 14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdpg`.
 
