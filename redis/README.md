@@ -156,10 +156,10 @@ The app uses a PUT and a GET operation:
 
 - PUT
   - takes user input from [main.js](public/javascript/main.js)
-  - uses the `client.query` method to add the user input to a hashed set in the Redis keyspace called _words_.
+  - uses the `client.hset` method to add the user input to a hashed set in the Redis keyspace called _words_.
 
 - GET
-  - uses `client.query` method to retrieve the contents of the hashed set called _words_ in the Redis keyspace.
+  - uses `client.hgetall` method to retrieve the contents of the hashed set called _words_ in the Redis keyspace.
   - returns the response of the database command to [main.js](public/javascript/main.js)
 
 
