@@ -9,7 +9,7 @@ The repositories containing samples for each database and message queue. Each gi
 Clone the repository of the language that you want to use. For instance, you can clone the **Node** repository by clicking on the **Node** branch. Then select the green button **Clone or download** to get the URL you'll need to clone using SSH or HTTPS. In your terminal you can run a command like:
 
 ```shell
-git clone -b node git@github.com:aa7955/clouddatabases-kubernetes-examples.git
+git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
 ```
 
 Once the branch has been cloned you can select the appropriate directory for the database you want to try out. Each database has its own instructons on how to provision and deploy a database or message queue and an application on IBM Cloud Kubernetes.
