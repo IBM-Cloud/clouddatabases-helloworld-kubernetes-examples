@@ -1,15 +1,9 @@
-# IBM Cloud Databases and Messages Examples
+# IBM Cloud Databases and Messages Python Examples
 
-A set of example applications built on IBM Cloud Kubernetes using IBM Cloud Databases and Messages to store and retrieve data.
+A set of examples applications that will add word/definition pairs to a database or message queue running on IBM Cloud Databases or Messages.
 
-The repositories containing samples for each database and message queue. Each git branch of this repository corresponds to samples in a particular programming language. For example, when you click on **Branch** you will see there is a **Node** branch, where all examples are written in JavaScript using Node.js. Once you've clicked on the branch, files will be presented that correspond to either a database or a message queue.  
+This repository contains the applications written in Python.
 
-## Trying out the sample applications
+## Running the examples
 
-Clone the repository of the language that you want to use. For instance, you can clone the **Node** repository by clicking on the **Node** branch. Then select the green button **Clone or download** to get the URL you'll need to clone using SSH or HTTPS. In your terminal you can run a command like:
-
-```shell
-git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
-```
-
-Once the branch has been cloned you can select the appropriate directory for the database you want to try out. Each database has its own instructons on how to provision and deploy a database or message queue and an application on IBM Cloud Kubernetes.
+Select the database or message queue you want to run, then follow the directions in each directory's `README`. Applications run on IBM Cloud Kubernetes so make sure you follow the directions to set up a Kubernetes cluster and connect that to your IBM Cloud Database or Message queue.
