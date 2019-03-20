@@ -37,7 +37,7 @@ clouddatabases-redis-helloworld-python is a sample IBM Cloud application which s
 6. Create your database service.
 
       The database can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a
-      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-psql" and we wanted it to be a "databases-for-redis" deployment on the standard plan running in the us-south region, the command would look like this:
+      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-redis" and we wanted it to be a "databases-for-redis" deployment on the standard plan running in the us-south region, the command would look like this:
 
       ```shell
       ibmcloud resource service-instance-create example-redis databases-for-redis standard us-south
@@ -86,18 +86,18 @@ clouddatabases-redis-helloworld-python is a sample IBM Cloud application which s
 
 13. `cd` into this newly created directory, and `cd` into the `redis` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
-14. Once you're in the `postgresql` folder, create a file that stores your database's self-signed certificate to confirm that your application is connecting to the appropriate server. It's base64 encoded, but you can get the decoded certificate using the `ibmcloud cdb` plugin with the following command using your database deployment's name:
+14. Once you're in the `redis` folder, create a file that stores your database's self-signed certificate to confirm that your application is connecting to the appropriate server. It's base64 encoded, but you can get the decoded certificate using the `ibmcloud cdb` plugin with the following command using your database deployment's name:
 
       ```shell
-      ibmcloud cdb cacert example-psql
+      ibmcloud cdb cacert example-redis
       ```
 
       Now, save that to a file in your application's directory. We're calling it `dbcert` which is referenced in the `Dockerfile`. You can call the file whatever you want, but you'll need to change that name in the `Dockerfile` if you use another name.
 
-15. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdpg`.
+15. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdredis`.
 
     ```shell
-    ibmcloud cr build -t <region>.icr.io/<namespace>/icdpg .
+    ibmcloud cr build -t <region>.icr.io/<namespace>/icdredis .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -110,7 +110,7 @@ clouddatabases-redis-helloworld-python is a sample IBM Cloud application which s
 
     ```shell
     REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    <region>.icr.io/mynamespace/icdpg         latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    <region>.icr.io/mynamespace/icdredis      latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 16. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
@@ -133,7 +133,7 @@ clouddatabases-redis-helloworld-python is a sample IBM Cloud application which s
 17. Deploy the application to IBM Cloud Kubernetes Service. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
 
     ```shell
-    kubectl apply -f clouddb-deployment.yml
+    kubectl apply -f clouddb-deployment.yaml
     ```
 
 18. Get the IP for the application.
