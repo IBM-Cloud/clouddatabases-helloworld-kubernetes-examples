@@ -125,7 +125,7 @@ clouddatabases-redis-helloworld-nodejs is a sample IBM Cloud application which s
 16. Deploy the application to IBM Cloud Kubernetes Service. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
 
     ```shell
-    kubectl apply -f clouddb-deployment.yml
+    kubectl apply -f clouddb-deployment.yaml
     ```
 
 17. Get the IP for the application.
