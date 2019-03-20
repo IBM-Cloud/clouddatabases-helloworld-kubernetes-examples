@@ -97,7 +97,7 @@ clouddatabases-redis-helloworld-python is a sample IBM Cloud application which s
 15. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdpg`.
 
     ```shell
-    ibmcloud cr build -t registry.<your-region>.bluemix.net/<namespace>/icdpg .
+    ibmcloud cr build -t <region>.icr.io/<namespace>/icdpg .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -110,7 +110,7 @@ clouddatabases-redis-helloworld-python is a sample IBM Cloud application which s
 
     ```shell
     REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    registry.ng.bluemix.net/mynamespace/icdpg latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    <region>.icr.io/mynamespace/icdpg         latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 16. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
@@ -118,7 +118,7 @@ clouddatabases-redis-helloworld-python is a sample IBM Cloud application which s
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
     ```yaml
-    image: "registry.<region>.bluemix.net/<namespace>/icdredis" # Edit me
+    image: "<region>.icr.io/<namespace>/icdredis" # Edit me
     ```
 
     Now, under `secretKeyRef`, change the name of `<redis-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for Redis to your Kubernetes cluster.
