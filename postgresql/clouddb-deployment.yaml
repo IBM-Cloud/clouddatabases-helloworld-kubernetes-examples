@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: cloudpostgres-python-app
-        image: "registry.<region>.bluemix.net/<namespace>/icdpg" # Edit me
+        image: "<region>.icr.io/<namespace>/icdpg" # Edit me
         imagePullPolicy: Always
         env:
         - name: BINDING
