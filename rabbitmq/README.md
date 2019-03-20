@@ -88,10 +88,10 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
 
 13. `cd` into this newly created directory, and `cd` into the `rabbitmq` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
-14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdetcd`.
+14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdrabbitmq`.
 
     ```shell
-    ibmcloud cr build -t <region>.icr.io/<namespace>/icdetcd .
+    ibmcloud cr build -t <region>.icr.io/<namespace>/icdrabbitmq .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -112,7 +112,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
     ```yaml
-    image: "<region>.icr.io/<namespace>/icdetcd" # Edit me
+    image: "<region>.icr.io/<namespace>/icdrabbitmq" # Edit me
     ```
 
     Now, under `secretKeyRef`, change the name of `<rabbitmq-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Messages for RabbitMQ to your Kubernetes cluster.
@@ -151,7 +151,7 @@ The cloudmessages-rabbitmq-helloworld app displays the contents of a _sample_ me
 
 | File | Description |
 | ---- | ----------- |
-|[**server.js**](server.js)|Establishes a connection to the RabbitMQ message queue using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the etcd credentials) and handles create and read operations on RabbitMQ. |
+|[**server.js**](server.js)|Establishes a connection to the RabbitMQ message queue using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the RabbitMQ credentials) and handles create and read operations on RabbitMQ. |
 |[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the RabbitMQ message queue.|
 
 The app uses a PUT and a GET operation:

@@ -86,10 +86,10 @@ clouddatabases-redis-helloworld-nodejs is a sample IBM Cloud application which s
 
 13. `cd` into this newly created directory, and `cd` into the `redis` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
-14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdpg`.
+14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdredis`.
 
     ```shell
-    ibmcloud cr build -t <region>.icr.io/<namespace>/icdpg .
+    ibmcloud cr build -t <region>.icr.io/<namespace>/icdredis .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -102,7 +102,7 @@ clouddatabases-redis-helloworld-nodejs is a sample IBM Cloud application which s
 
     ```shell
     REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    <region>.icr.io/mynamespace/icdpg         latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    <region>.icr.io/mynamespace/icdredis      latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 15. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
