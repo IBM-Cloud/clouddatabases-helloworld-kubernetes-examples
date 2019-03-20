@@ -1,30 +1,30 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: icdpostgres-app
+  name: icdredis-app
 spec:
   replicas: 3
   template:
     metadata:
-      name: icdpostgres-app
+      name: icdredis-app
       labels:
         run: clouddb-demo
     spec:
       containers:
-      - name: cloudpostgres-nodejs-app
-        image: "<region>.icr.io/<namespace>/icdpg" # Edit me
+      - name: cloudredis-nodejs-app
+        image: "<region>.icr.io/<namespace>/icdredis" # Edit me
         imagePullPolicy: Always
         env:
         - name: BINDING
           valueFrom:
             secretKeyRef:
-              name: <postgres-secret-name> # Edit me
+              name: <redis-secret-name> # Edit me
               key: binding
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloudpostgres-service
+  name: cloudredis-service
   labels:
     run: clouddb-demo
 spec:

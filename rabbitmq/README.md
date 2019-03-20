@@ -91,7 +91,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
 14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdetcd`.
 
     ```shell
-    ibmcloud cr build -t registry.<your-region>.bluemix.net/<namespace>/icdetcd .
+    ibmcloud cr build -t <region>.icr.io/<namespace>/icdetcd .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -104,7 +104,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
 
     ```shell
     REPOSITORY                                      TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    registry.ng.bluemix.net/mynamespace/icmrabbitmq latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    <region>.icr.io/mynamespace/icmrabbitmq         latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 15. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
@@ -112,7 +112,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
     ```yaml
-    image: "registry.<region>.bluemix.net/<namespace>/icdetcd" # Edit me
+    image: "<region>.icr.io/<namespace>/icdetcd" # Edit me
     ```
 
     Now, under `secretKeyRef`, change the name of `<rabbitmq-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Messages for RabbitMQ to your Kubernetes cluster.

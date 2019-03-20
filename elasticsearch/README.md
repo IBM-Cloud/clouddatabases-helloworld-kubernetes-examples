@@ -91,7 +91,7 @@ clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application
 14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdes`.
 
     ```shell
-    ibmcloud cr build -t registry.<your-region>.bluemix.net/<namespace>/icdes .
+    ibmcloud cr build -t <region>.icr.io/<namespace>/icdes .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -104,7 +104,7 @@ clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application
 
     ```shell
     REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    registry.ng.bluemix.net/mynamespace/icdes latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    <region>.icr.io/mynamespace/icdes         latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 15. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
@@ -112,7 +112,7 @@ clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
     ```yaml
-    image: "registry.<region>.bluemix.net/<namespace>/icdes" # Edit me
+    image: "<region>.icr.io/<namespace>/icdes" # Edit me
     ```
 
     Now, under `secretKeyRef`, change the name of `<elasticsearch-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for Elasticsearch to your Kubernetes cluster.
