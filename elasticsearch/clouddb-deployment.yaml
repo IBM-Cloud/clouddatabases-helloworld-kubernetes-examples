@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: cloudelasticsearch-python-app
-        image: "registry.<region>.bluemix.net/<namespace>/icdes" # Edit me
+        image: "<region>.icr.io/<namespace>/icdes" # Edit me
         imagePullPolicy: Always
         env:
         - name: BINDING
