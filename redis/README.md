@@ -172,7 +172,7 @@ The app uses a PUT and a GET operation:
 
 
 
-[databases_for_redis_url]: https://console.bluemix.net/catalog/services/databases-for-redis/
+[databases_for_redis_url]: https://cloud.ibm.com/catalog/services/databases-for-redis/
 [IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForRedis
 [Download_IBMCloud_cli]: https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html
 [Download_Kubernetes_cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/

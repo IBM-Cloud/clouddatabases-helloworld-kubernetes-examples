@@ -1,6 +1,6 @@
-# clouddatabases-postgresql-python-on-kubernetes overview
+# clouddatabases-mongodb-python-on-kubernetes overview
 
-clouddatabases-postgresql-helloworld-python is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Databases for PostgreSQL service to an IBM Cloud Kubernetes Service application written in Python
+clouddatabases-mongodb-helloworld-python is a sample IBM Cloud application which shows you how to connect to an IBM Cloud Databases for MongoDB service to an IBM Cloud Kubernetes Service application written in Python
 
 ## Running the app on IBM Cloud
 
@@ -37,10 +37,10 @@ clouddatabases-postgresql-helloworld-python is a sample IBM Cloud application wh
 6. Create your database service.
 
       The database can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a
-      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-psql" and we wanted it to be a "databases-for-postgresql" deployment on the standard plan running in the us-south region, the command would look like this:
+      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-mongodb" and we wanted it to be a "databases-for-mongodb" deployment on the standard plan running in the us-south region, the command would look like this:
 
       ```shell
-      ibmcloud resource service-instance-create example-psql databases-for-postgresql standard us-south
+      ibmcloud resource service-instance-create example-mongodb databases-for-mongodb standard us-south
       ```
       Remember the database service instance name.
 
@@ -66,19 +66,19 @@ clouddatabases-postgresql-helloworld-python is a sample IBM Cloud application wh
       ibmcloud cr namespace-add <your_namespace>
       ```
 
-10. Add the IBM Cloud Databases for PostgreSQL service to your cluster.
+10. Add the IBM Cloud Databases for MongoDB service to your cluster.
 
       ```shell
-      ibmcloud ks cluster-service-bind <your_cluster_name> default example-psql
+      ibmcloud ks cluster-service-bind <your_cluster_name> default example-mongodb
       ```
 
-11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
+11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for MongoDB service that's provisioned in your account.
 
       ```shell
       kubectl get secrets --namespace=default
       ```
 
-    **Note**: save the name of the secret that was generated when you bound `example-psql` to your Kubernetes service.
+    **Note**: save the name of the secret that was generated when you bound `example-mongodb` to your Kubernetes service.
 
 12. Clone the app to your local environment from your terminal using the following command:
 
@@ -86,20 +86,20 @@ clouddatabases-postgresql-helloworld-python is a sample IBM Cloud application wh
       git clone -b python git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
       ```
 
-13. `cd` into this newly created directory, and `cd` into the `postgresql` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.py`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
+13. `cd` into this newly created directory, and `cd` into the `mongodb` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.py`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
-14. Once you're in the `postgresql` folder, create a file that stores your database's self-signed certificate to confirm that your application is connecting to the appropriate server. It's base64 encoded, but you can get the decoded certificate using the `ibmcloud cdb` plugin with the following command using your database deployment's name:
+14. Once you're in the `mongodb` folder, create a file that stores your database's self-signed certificate to confirm that your application is connecting to the appropriate server. It's base64 encoded, but you can get the decoded certificate using the `ibmcloud cdb` plugin with the following command using your database deployment's name:
 
       ```shell
-      ibmcloud cdb cacert example-psql
+      ibmcloud cdb cacert example-mongodb
       ```
 
       Now, save that to a file in your application's directory. We're calling it `dbcert` which is referenced in the `Dockerfile`. You can call the file whatever you want, but you'll need to change that name in the `Dockerfile` if you use another name.
 
-15. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdpg`.
+15. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdmongodb`.
 
     ```shell
-    ibmcloud cr build -t <region>.icr.io/<namespace>/icdpg .
+    ibmcloud cr build -t <region>.icr.io/<namespace>/icdmongodb .
     ```
 
     After it's built, you can view the image in container registry using:
@@ -111,8 +111,8 @@ clouddatabases-postgresql-helloworld-python is a sample IBM Cloud application wh
     You'll get something like the following response:
 
     ```shell
-    REPOSITORY                                TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-    <region>.icr.io/mynamespace/icdpg         latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
+    REPOSITORY                                     TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
+    <region>.icr.io/mynamespace/icdmongodb         latest   81c3959ea657   mynamespace 4 hours ago   28 MB   No Issues
     ```
 
 16. Update the Kubernetes deployment configuration file `clouddb-deployment.yaml`.
@@ -120,14 +120,14 @@ clouddatabases-postgresql-helloworld-python is a sample IBM Cloud application wh
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
     ```yaml
-    image: "<region>.icr.io/<namespace>/icdpg" # Edit me
+    image: "<region>.icr.io/<namespace>/icdmongodb" # Edit me
     ```
 
-    Now, under `secretKeyRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for PostgreSQL to your Kubernetes cluster.
+    Now, under `secretKeyRef`, change the name of `<mongodb-secret-name>` to match the name of the secret that was created when you bound IBM Cloud Databases for MongoDB to your Kubernetes cluster.
 
     ```yaml
     secretKeyRef:
-      name: <postgres-secret-name> # Edit me
+      name: <mongodb-secret-name> # Edit me
     ```
 
     As for the `service` configuration at the bottom of the file, [`nodePort`][nodePort_information] indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Python application runs on in the container.
@@ -153,29 +153,28 @@ clouddatabases-postgresql-helloworld-python is a sample IBM Cloud application wh
 
     Now you can access the application from the Public IP on port 30081.
 
-The clouddatabases-postgresql-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
+The clouddatabases-mongodb-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
 
 ## Code Structure
 
 | File | Description |
 | ---- | ----------- |
-|[**server.py**](server.py)|Establishes a connection to the PostgreSQL database using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the PostgreSQL credentials) and handles create and read operations on the database. |
-|[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the PostgreSQL database.|
+|[**server.py**](server.py)|Establishes a connection to the MongoDB database using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the MongoDB credentials) and handles create and read operations on the database. |
+|[**main.js**](public/javascripts/main.js)|Handles user input for a PUT command and parses the results of a GET command to output the contents of the MongoDB database.|
 
 The app uses a PUT and a GET operation:
 
 - PUT
   - takes user input from [main.js](public/javascript/main.js)
-  - uses the `client.query` method to add the user input to the words table
+  - uses the `collection.insert_one()` method to add the user input to the words collection
 
 - GET
-  - uses `client.query` method to retrieve the contents of the _words_ table
+  - uses `collection.find()` method to retrieve the contents of the _words_ collection
   - returns the response of the database command to [main.js](public/javascript/main.js)
 
 
-
-[databases_for_postgreSQL_url]: https://cloud.ibm.com/catalog/services/databases-for-postgresql/
-[IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForPostgreSQL
+[databases_for_mongodb_url]: https://cloud.ibm.com/catalog/services/databases-for-mongodb
+[IBMCloud_signup_url]: https://console.bluemix.net/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForMongoDB
 [Download_IBMCloud_cli]: https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html
 [Download_Kubernetes_cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
 [nodePort_information]: https://console.bluemix.net/docs/containers/cs_nodeport.html#nodeport

@@ -18,7 +18,7 @@ spec:
         - name: BINDING
           valueFrom:
             secretKeyRef:
-              name: binding-icd-postgresql # Edit me
+              name: <postgres-secret-name> # Edit me
               key: binding
 ---
 apiVersion: v1
