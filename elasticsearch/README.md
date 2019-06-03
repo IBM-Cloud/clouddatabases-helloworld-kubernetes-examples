@@ -44,9 +44,12 @@ clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application
       ```
       Remember the database service instance name.
 
+      You can also set up the database to use [public and/or private service endpoints](https://cloud.ibm.com/docs/services/service-endpoint?topic=service-endpoint-about), otherwise a public endpoint will be created by default. To set up private endpoints, see our [documentation](https://cloud.ibm.com/docs/services/databases-for-elasticsearch?topic=cloud-databases-service-endpoints).
+
+
 7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview).
 
-      Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the free plan which comes with 1 worker node.
+      Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the free plan which comes with 1 worker node. However, if you want to use private endpoints to connect to Kubernetes applications, you'll need to upgrade to the paid Kubernetes plan.
 
       Once a cluster is provisioned, you'll be given a list of steps to follow to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
 
@@ -71,6 +74,20 @@ clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application
       ```shell
       ibmcloud ks cluster-service-bind <your_cluster_name> default example-elasticsearch
       ```
+
+      **Note**: If your database uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a [service key](https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-ibmcloud_commands_resource#ibmcloud_resource_service_key_create) for your database so Kubernetes can use it when binding to the database. You can set up a service key, for example, that we'll call `example-private-key`  using the command:
+
+      ```shell
+      ibmcloud resource service-key-create example-private-key Administrator --instance-name example-elasticsearch --service-endpoint private  
+      ```
+
+      The role that we've selected for this key is `Administrator` with our database name `example-elasticsearch`, and we make sure that the private service endpoint is selected `--service-endpoint private`. After that, you'll bind the database to the Kubernetes cluster using the command:
+
+      ```shell
+      ibmcloud ks cluster-service-bind <your_cluster_name> default example-elasticsearch --key example-private-key
+      ```
+
+      This will create a secret in your Kubernetes cluster using the database's private endpoint from the key you've created above.
 
 11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for Elasticsearch service that's provisioned in your account.
 
