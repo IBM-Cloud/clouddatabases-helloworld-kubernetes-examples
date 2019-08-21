@@ -1,6 +1,6 @@
 {
   "name": "clouddatabases-elasticsearch-nodejs-on-kubernetes",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "dependencies": {
     "body-parser": "^1.15.2",
     "elasticsearch": "^15.2.0",

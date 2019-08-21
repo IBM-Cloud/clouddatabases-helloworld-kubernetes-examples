@@ -1,5 +1,5 @@
 {
-  "name": "clouddatabases-rabbitmq-nodejs-on-kubernetes",
+  "name": "cloudmessages-rabbitmq-nodejs-on-kubernetes",
   "version": "1.0.0",
   "description": "IBM Cloud Messages for RabbitMQ Node.js example for Kubernetes",
   "dependencies": {

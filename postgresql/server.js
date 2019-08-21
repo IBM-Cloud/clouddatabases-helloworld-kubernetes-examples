@@ -53,6 +53,7 @@ let credentials;
 // Check to make sure that the BINDING environment variable is present
 // If it's not present, then it will throw an error
 if (process.env.BINDING) {
+    console.log(process.env.BINDING)
     credentials = JSON.parse(process.env.BINDING);
 }
 

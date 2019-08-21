@@ -18,7 +18,7 @@ spec:
         - name: BINDING
           valueFrom:
             secretKeyRef:
-              name: <postgres-secret-name> # Edit me
+              name: <postgresql-secret-name> # Edit me
               key: binding
 ---
 apiVersion: v1
@@ -34,4 +34,4 @@ spec:
   ports:
   - protocol: TCP
     port: 8080
-    nodePort: 30081
+    nodePort: 30082
