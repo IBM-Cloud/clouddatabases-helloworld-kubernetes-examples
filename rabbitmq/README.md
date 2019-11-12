@@ -34,19 +34,20 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
 
       **Note:** If you have a federated user ID, use the `ibmcloud login --sso` command to log in with your single sign on ID.
 
-6. Create your database service.
+6. Create your message queue service.
 
-      The database can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a
-      service instance name, a service name, plan name and location. For example, if we wished to create a database service named "example-rabbitmq" and we wanted it to be a "messages-for-rabbitmq" deployment on the standard plan running in the us-south region, the command would look like this:
+      The message queue can be created from the command line using the `ibmcloud resource service-instance-create` command. This takes a service instance name, a service name, plan name and location. For example, if we wished to create a message queue service named "example-rabbitmq" and we wanted it to be a "messages-for-rabbitmq" deployment on the standard plan running in the us-south region, the command would look like this:
 
       ```shell
       ibmcloud resource service-instance-create example-rabbitmq messages-for-rabbitmq standard us-south
       ```
-      Remember the database service instance name.
+      Remember the message queue service instance name.
+
+      You can also set up the message queue to use [public and/or private service endpoints](https://cloud.ibm.com/docs/services/service-endpoint?topic=service-endpoint-about), otherwise a public endpoint will be created by default. To set up private endpoints, see our [documentation](https://cloud.ibm.com/docs/services/messages-for-rabbitmq?topic=cloud-databases-service-endpoints).
 
 7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview).
 
-      Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the free plan which comes with 1 worker node.
+      Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the free plan which comes with one worker node. However, if you want to use private endpoints to connect to Kubernetes applications, you'll need to upgrade to the paid Kubernetes plan.
 
       Once a cluster is provisioned, you'll be given a list of steps to follow to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
 
@@ -72,6 +73,20 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
       ibmcloud ks cluster-service-bind <your_cluster_name> default example-rabbitmq
       ```
 
+      **Note**: If your message queue uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a [service key](https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-ibmcloud_commands_resource#ibmcloud_resource_service_key_create) for your message queue so Kubernetes can use it when binding to the message queue. You can set up a service key, for example, that we'll call `example-private-key`  using the command:
+
+      ```shell
+      ibmcloud resource service-key-create example-private-key Administrator --instance-name example-rabbitmq --service-endpoint private  
+      ```
+
+      The role that we've selected for this key is `Administrator` with our message queue name `example-rabbitmq`, and we make sure that the private service endpoint is selected `--service-endpoint private`. After that, you'll bind the message queue to the Kubernetes cluster using the command:
+
+      ```shell
+      ibmcloud ks cluster-service-bind <your_cluster_name> default example-rabbitmq --key example-private-key
+      ```
+
+      This will create a secret in your Kubernetes cluster using the message queue's private endpoint from the key you've created above.
+
 11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Messages for RabbitMQ service that's provisioned in your account.
 
       ```shell
@@ -86,7 +101,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
       git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
       ```
 
-13. `cd` into this newly created directory, and `cd` into the `rabbitmq` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
+13. `cd` into this newly created directory, and `cd` into the `rabbitmq` folder. The code for connecting to the service, and reading from and updating the message queue can be found in `server.js`. See [Code Structure](#code-structure) and the code comments for information on the app's functions. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
 14. Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container `icdrabbitmq`.
 
