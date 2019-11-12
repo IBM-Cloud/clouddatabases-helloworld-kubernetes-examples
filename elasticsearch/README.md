@@ -49,7 +49,7 @@ clouddatabases-elasticsearch-helloworld-nodejs is a sample IBM Cloud application
 
 7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview).
 
-      Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the free plan which comes with 1 worker node. However, if you want to use private endpoints to connect to Kubernetes applications, you'll need to upgrade to the paid Kubernetes plan.
+      Choose the location and resource group that you want to set up your cluster in. Select the cluster type that you want to use. This example only requires the free plan which comes with one worker node. However, if you want to use private endpoints to connect to Kubernetes applications, you'll need to upgrade to the paid Kubernetes plan.
 
       Once a cluster is provisioned, you'll be given a list of steps to follow to access your cluster and set the environment variables under the _Access_ tab. There, you will also be able to verify that your deployment is provisioned and running normally.
 
