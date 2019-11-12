@@ -44,7 +44,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       ```
       Remember the database service instance name.
 
-      You can also set up the database to use [public and/or private service endpoints](https://cloud.ibm.com/docs/services/service-endpoint?topic=service-endpoint-about), otherwise a public endpoint will be created by default. To set up private endpoints, see our [documentation](https://cloud.ibm.com/docs/services/databases-for-elasticsearch?topic=cloud-databases-service-endpoints).
+      You can also set up the database to use [public and/or private service endpoints](https://cloud.ibm.com/docs/services/service-endpoint?topic=service-endpoint-about), otherwise a public endpoint will be created by default. To set up private endpoints, see our [documentation](https://cloud.ibm.com/docs/services/databases-for-redis?topic=cloud-databases-service-endpoints).
 
 7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview).
 
@@ -80,7 +80,7 @@ clouddatabases-postgresql-helloworld-nodejs is a sample IBM Cloud application wh
       ibmcloud resource service-key-create example-private-key Administrator --instance-name example-psql --service-endpoint private  
       ```
 
-      The role that we've selected for this key is `Administrator` with our database name `example-elasticsearch`, and we make sure that the private service endpoint is selected `--service-endpoint private`. After that, you'll bind the database to the Kubernetes cluster using the command:
+      The role that we've selected for this key is `Administrator` with our database name `example-psql`, and we make sure that the private service endpoint is selected `--service-endpoint private`. After that, you'll bind the database to the Kubernetes cluster using the command:
 
       ```shell
       ibmcloud ks cluster-service-bind <your_cluster_name> default example-psql --key example-private-key
