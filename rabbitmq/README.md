@@ -41,6 +41,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
       ```shell
       ibmcloud resource service-instance-create example-rabbitmq messages-for-rabbitmq standard us-south
       ```
+
       Remember the message queue service instance name.
 
       You can also set up the message queue to use [public and/or private service endpoints](https://cloud.ibm.com/docs/services/service-endpoint?topic=service-endpoint-about), otherwise a public endpoint will be created by default. To set up private endpoints, see our [documentation](https://cloud.ibm.com/docs/services/messages-for-rabbitmq?topic=cloud-databases-service-endpoints).
@@ -70,7 +71,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
 10. Add the IBM Cloud Messages for RabbitMQ service to your cluster.
 
       ```shell
-      ibmcloud ks cluster-service-bind <your_cluster_name> default example-rabbitmq
+      ibmcloud ks cluster service bind <your_cluster_name> default example-rabbitmq
       ```
 
       **Note**: If your message queue uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a [service key](https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-ibmcloud_commands_resource#ibmcloud_resource_service_key_create) for your message queue so Kubernetes can use it when binding to the message queue. You can set up a service key, for example, that we'll call `example-private-key`  using the command:
@@ -82,7 +83,7 @@ cloudmessages-rabbitmq-helloworld-nodejs is a sample IBM Cloud application which
       The role that we've selected for this key is `Administrator` with our message queue name `example-rabbitmq`, and we make sure that the private service endpoint is selected `--service-endpoint private`. After that, you'll bind the message queue to the Kubernetes cluster using the command:
 
       ```shell
-      ibmcloud ks cluster-service-bind <your_cluster_name> default example-rabbitmq --key example-private-key
+      ibmcloud ks cluster service bind <your_cluster_name> default example-rabbitmq --key example-private-key
       ```
 
       This will create a secret in your Kubernetes cluster using the message queue's private endpoint from the key you've created above.
@@ -178,8 +179,6 @@ The app uses a PUT and a GET operation:
 - GET
   - opens a connection to the message queues and gets the message from the `sample` queue
   - returns the response of the message queue to [main.js](public/javascript/main.js)
-
-
 
 [messages_for_rabbitmq_url]: https://cloud.ibm.com/catalog/services/messages-for-rabbitmq
 [IBMCloud_signup_url]: https://cloud.ibm.com/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-messagesforrabbitmq
