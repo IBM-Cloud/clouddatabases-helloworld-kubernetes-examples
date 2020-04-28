@@ -42,6 +42,7 @@ clouddatabases-elasticsearch-helloworld-python is a sample IBM Cloud application
       ```shell
       ibmcloud resource service-instance-create example-elasticsearch databases-for-elasticsearch standard us-south
       ```
+
       Remember the database service instance name.
 
 7. [Create an IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/overview).
@@ -69,7 +70,7 @@ clouddatabases-elasticsearch-helloworld-python is a sample IBM Cloud application
 10. Add the IBM Cloud Databases for Elasticsearch service to your cluster.
 
       ```shell
-      ibmcloud ks cluster-service-bind <your_cluster_name> default example-elasticsearch
+      ibmcloud ks cluster service bind <your_cluster_name> default example-elasticsearch
       ```
 
 11. Verify that the Kubernetes secret was create in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for Elasticsearch service that's provisioned in your account.
@@ -171,8 +172,6 @@ The app uses a PUT and a GET operation:
 - GET
   - uses `es.search` method to retrieve the contents of the _words_ index
   - returns the response of the database command to [main.js](public/javascript/main.js)
-
-
 
 [databases_for_elasticsearch_url]: https://cloud.ibm.com/catalog/services/databases-for-elasticsearch/
 [IBMCloud_signup_url]: https://cloud.ibm.com/registration/?cm_mmc=Display-SampleApp-_-IBMCloudSampleApp-DatabasesForElasticsearch
